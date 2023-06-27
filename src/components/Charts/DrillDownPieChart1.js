@@ -34,58 +34,57 @@ const colors = [
 
 const DrillDownPieChart1 = (props) => {
   let cnt = 0;
+  ///
+  const [myArray, setMyArray] = useState([]);
+  // console.log('here first');
   const [mapdata, setMapddata] = useState([]);
-  const MapArr = (start,end) => {
+  
+  const MapArr = (start, end) => {
     const rangesMap = [];
-    axios.get(`http://localhost:8080/election/slice/${start}/${end}`).then((respo) => {
-      // http://localhost:8080/cabinet/ministers
+    return axios.get(`http://localhost:8080/election/slice/${start}/${end}`).then((respo) => {
       const response = respo.data;
-      // const rangesMap = [];
-      for (var i of response){
-        const val = i.constname
-        rangesMap.push(val);
-        // rangesMap.push(', ')
+      for (var i of response) {
+        const val = i.constname;
+        rangesMap.push(val + ', ');
       }
-      // console.log(rangesMap);
-      // setMapddata(rangesMap);
-      // return rangesMap;
-      // setMapddata(rangesMap);
-      // console.log(rangesMap);
+      return rangesMap;
     }).catch(error => {
       console.error('Axios error:', error);
-    })
-    return rangesMap;
-  }
-  // MapArr(1,10);
-  // console.log(MapArr(1,10))
-  // let storedValue;
+    });
+  };
+  
+  useEffect(() => {
+    // console.log('in useEffect');
+    (async () => {
+      for (let i = 1; i <= 201; i += 25) {
+        const rangeStart = i;
+        const rangeEnd = i + 24;
+        let rangeKey = `Range ${rangeStart}-${rangeEnd}`;
+  
+        try {
+          const rangeValue = await MapArr(rangeStart, rangeEnd);
+          if (i === 201){
+            rangeKey = 'Range 201-224';
+          }
+          const rangeObject = { [rangeKey]: rangeValue };
+          myArray.push(rangeObject);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+  
+      // console.log(myArray);
+      setMapddata(myArray);
+    })();
+  }, []);
 
-  // MapArr(1, 25)
-  //   .then(result => {
-  //     // Store the result
-  //     storedValue = result;
-  //     console.log(storedValue);
-  //   })
-  //   .catch(error => {
-  //     // Handle errors here
-  //     console.error('Error:', error);
-  //   });
-  const myArray = [];
+  const uniqueArray = myArray.filter((value, index) => {
+    return myArray.indexOf(value) === index;
+  });
+  
+  // Access uniqueArray here or in other parts of your component
+  // console.log(uniqueArray);
 
-  for (let i = 1; i <= 201; i += 25) {
-    const rangeStart = i;
-    const rangeEnd = i + 24;
-    const rangeKey = `Range ${rangeStart}-${rangeEnd}`;
-    let rangeValue = [];
-    rangeValue = MapArr(rangeStart,rangeEnd);
-    // rangeValue = 1
-    console.log(rangeValue);
-    // console.log(rangeValue);
-    const rangeObject = { [rangeKey]: [rangeValue] };
-    myArray.push(rangeObject);
-  }
-  console.log(myArray);
-  // 2nd level data fetching
   const fetchData = (start,end) => {
     axios.get(`http://localhost:8080/election/slice/${start}/${end}`).then((respo) => {
       // http://localhost:8080/cabinet/ministers
@@ -107,7 +106,6 @@ const DrillDownPieChart1 = (props) => {
       console.error('Axios error:', error);
     })
   }
-
 
   // 3rd level data fetching
   const fetchData2 = (val) =>  {
@@ -161,33 +159,50 @@ const DrillDownPieChart1 = (props) => {
   const ranges = [];
   let startValue = 1;
   const rangeSize = 25;
-  const rangeCount = 9;
+  const rangeCount = Math.ceil(224/rangeSize);
+  const last_ele = 224 % rangeSize;
 
   for (let i = 0; i < rangeCount; i++) {
     const rangeName = 'Range ' + String.fromCharCode(65 + i);
-    const endValue = startValue + rangeSize - 1;
-    const rangeLabel = 'Range ' + startValue + '-' + endValue;
-    ranges.push({   // ranges.push();
-      name: rangeName,
-      value: 1,
-      label: rangeLabel
-    });
-    startValue = endValue + 1;
+    if (i === rangeCount - 1){
+      const endValue = startValue + rangeSize - 1;
+      const rangeLabel = 'Range ' + startValue + '-' + '224';
+      ranges.push({   // ranges.push();
+        name: rangeName,
+        value: 1,
+        label: rangeLabel
+      });
+      startValue = endValue + 1;
+    }
+    else{
+      const endValue = startValue + rangeSize - 1;
+      const rangeLabel = 'Range ' + startValue + '-' + endValue;
+      ranges.push({   // ranges.push();
+        name: rangeName,
+        value: 1,
+        label: rangeLabel
+      });
+      startValue = endValue + 1;
+    }
+    // setRname('Range ' + String.fromCharCode(65 + i));
+    // setRlabel('Range ' + startValue + '-' + endValue);
   }
+  // ranges.push({   // ranges.push();
+  //   name: rname,
+  //   value: 1,
+  //   label: rlabel
+  // });
 
   // initializing the variables
   const [data, setData] = useState(ranges);
   const [previousData, setPreviousData] = useState([]);
   const [level, setLevel] = useState(1);
   const [array,setArray] = useState([]);
-  const [showdata,setShowdata] = useState(false)
+  const [showdata,setShowdata] = useState(false);
   const [coname,setConame] = useState("");
   const [cokey,setCokey] = useState("");
   const [secondata,setSecondata] = useState([]);
   const [fourdata,setFourdata] = useState([]);
-  // const [mapdata, setMapddata] = useState([]);
-  // const [counnt, setCount] = useState(0);
-
 
   // 2nd and 3rd level data 
   const HandleSliceClick = (name) => {
@@ -396,14 +411,19 @@ const DrillDownPieChart1 = (props) => {
                 <th style={table2HeaderStyle}>Constituencies</th>
               </tr>
             </thead>
-           { console.log(myArray)}
             <tbody>
-              {myArray.map((data,index) => (
-                <tr key={data.sno}>
-                  <td style={table2CellStyle}>{Object.keys(data)[0]}</td>
-                  <td style={table2CellStyle}>{Object.values(data)[0]}</td>
-                </tr>
-              ))}
+                {uniqueArray.map((data, index) => {
+                  if (index % 2 !== 1) {
+                    return (
+                      <tr key={data.sno}>
+                        <td style={table2CellStyle}>{Object.keys(data)[0]}</td>
+                        <td style={table2CellStyle}>{data[Object.keys(data)[0]]}</td>
+                      </tr>
+                    );
+                  } else {
+                    return null; // Skip odd-indexed elements
+                  }
+                })}
             </tbody>
           </table>
         </center>

@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Link, useHistory} from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -32,11 +34,20 @@ const Signup = () => {
     axios
       .post('http://localhost:8080/signup/save', signupData)
       .then(response => {
-        // console.log('Response:', response.data);
-        alert('User Added');
-        // window.location.href = '/';
+        // alert('User Added');
+        setTimeout(() => {
+          toast.success('User Added',{
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
+        }, 300);
         history.push('/');
-        // history.push('/login'); // Navigate to Login page
       })
       .catch(error => {
         console.error('Error:', error);
@@ -66,73 +77,181 @@ const Signup = () => {
           const is_existing_email = responseData.find((user) => user.email === enteredEmail);
           const is_existing_number = responseData.find((user) => user.number === '+91'+enteredNumber);
 
+          // if (is_user){
+          //   console.log('Username already exists');
+          // }
 
-          if (is_user){
-            console.log('Username already exists');
-          }
+          // if (is_existing_email){
+          //   console.log('Email already exists');
+          // }
 
-          if (is_existing_email){
-            console.log('Email already exists');
-          }
-
-          if (is_existing_number){
-            console.log('Number already exists');
-          }
+          // if (is_existing_number){
+          //   console.log('Number already exists');
+          // }
 
       if (!username) {
-        alert('Username is required');
+        toast.info('Username is required', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
       if (!password) {
-        alert('Password is required');
+        // alert('Password is required');
+        toast.info('Password is required', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (password.length < 8){
-        alert('enter password of length 8 characters minimum');
+        // alert('enter password of length 8 characters minimum');
+        toast.warn('enter password of length 8 characters minimum', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (password !== confirmPassword) {
-        alert('passwords donot match');
+        // alert('passwords donot match');
+        toast.warn('Passwords do-not match', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (!email) {
-        alert('Email is required');
+        // alert('Email is required');
+        toast.info('Email is required', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (validateEmail(email)) {
       } else {
-        alert('Enter a valid email i.d');
+        // alert('Enter a valid email i.d');
+        toast.warn('enter a valid email-id', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (!number) {
-        alert('Phone Number is required');
+        // alert('Phone Number is required');
+        toast.info('Phone number is required', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (!(validateNumber(number) && Number.isInteger(parseInt(number)))){
-        console.log("Phone Number is not Valid");
-        alert('enter a valid 10-digit Phone Number');
+        // console.log("Phone Number is not Valid");
+        // alert('enter a valid 10-digit Phone Number');
+        toast.warn('enter a valid 10-digit Phone number', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
       if (is_user !== undefined){
         setUsername('');
-        alert("Username already exists, enter a new username");
+        // alert("Username already exists, enter a new username");
+        toast.error('Username already exists, enter a new username', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
       if (is_existing_email !== undefined){
         setEmail('');
-        alert("Email already exists, enter a new Email");
+        // alert("Email already exists, enter a new Email");
+        toast.error('Email already exists, enter a new Email', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
       if (is_existing_number !== undefined){
         setNumber('');
-        alert("Phone number already exists, enter a new phone number");
+        // alert("Phone number already exists, enter a new phone number");
+        toast.error('Phone number already exists, enter a new phone number', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         return;
       }
 
@@ -146,6 +265,7 @@ const Signup = () => {
   };
 
   return (
+    <>
     <div style={{ marginTop: '30px',display: 'flex',justifyContent:'center' }}>
   <center>
     <h2>Sign Up</h2>
@@ -206,7 +326,8 @@ const Signup = () => {
     </p>
   </center>
 </div>
-
+<ToastContainer/>
+</>
   );
 };
 

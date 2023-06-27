@@ -2,25 +2,28 @@ import React,{useState,useEffect} from "react";
 import { Link } from 'react-router-dom';
 import "../CSS/Header.css";
 import img1 from "../images/img1.png";
-import profile from "../images/profile.png"
-import Cabinet from "../Cabinet/Cabinet";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Header = (props) => {
   const [isMenuOpen, setMenuOpen] = useState(true);
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const [isAdminOpen, setIsAdminOpen] = useState(true);
 
   const logout = () => {
+    setTimeout(() => {
+      toast.success('Logout successful');   
+    },3000);
     window.location.href='/'
   }
 
   useEffect(() => {
     setMenuOpen(props.render);
   }, [props.render]);
+
+  useEffect(() => {
+    setIsAdminOpen(props.adminRender);
+  }, [props.adminRender]);
+
   return (
     <>
       <nav className="header-container" style={{}}>
@@ -38,22 +41,6 @@ const Header = (props) => {
           </div>
         </div>
       </nav>
-      {/* <nav className="header-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
-        <div className="Container center" style={{ maxWidth: '1200px' }}>
-          <div className="ui fixed">
-            <div className="header-content">
-              <div className="logo-heading-container" style={{ display: 'flex', alignItems: 'center' }}>
-                <img style={{ marginTop: '5px', width: '50px' }} src={img1} alt="Logo" className="logo" />
-                <h2 style={{ paddingTop: '20px', textAlign: 'center', flexGrow: 1, margin: 0 }}>Karnataka 2023 Election results</h2>
-                <button style={{ marginLeft: '10px' }}>Logout</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-
-
-
 
       {isMenuOpen &&(
         <nav>
@@ -74,6 +61,13 @@ const Header = (props) => {
                 Cabinet Ministers
               </button>
               </Link>
+              {isAdminOpen && (
+                  <Link to="admin">
+                    <button className="btn btn-warning" >
+                      Users
+                    </button>
+                  </Link>
+              )}
             </div>
           </div>
         </div>

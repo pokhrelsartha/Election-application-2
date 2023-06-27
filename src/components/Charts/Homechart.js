@@ -93,11 +93,65 @@ const renderActiveShape = (props) => {
 export default function Homechart() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [datas, setDatas] = useState([]);
-    
+    const [bjparray, setBjpArray] = useState([]);
+    const [inCarray, setIncArray] = useState([]);
+    const [jdsArray, setJdsArray] = useState([]);
+    const [othArray, setOthArray] = useState([]);
+    const [curIndex, setCurIndex] = useState(0);
+    // {console.log(activeIndex)}
     useEffect(() => {
         fetchData2();
+        eleData();
+        setBjpArray([]);
+        setIncArray([]);
+        setJdsArray([]);
+        setOthArray([]);
       }, []);
-
+    // const [count, setCount] = useState(0);
+    
+    const eleData = () => {
+        axios.get(`http://localhost:8080/election/wondata`)
+        .then((response) => {
+            const responseData = response.data;
+            // console.log(responseData);
+            const ranges1 = [];
+            const ranges2 = [];
+            const ranges3 = [];
+            const ranges4 = [];
+            (async () => {
+            for (var i of responseData){
+                // console.log(i);
+                if (i.pname === 'Bharatiya Janata Party'){
+                    ranges1.push(i);
+                    // console.log(i);
+                }
+                else if (i.pname === 'Indian National Congress'){
+                    ranges2.push(i)
+                }
+                else if (i.pname === 'Janata Dal  (Secular)'){
+                    ranges3.push(i);
+                }
+                else{
+                    ranges4.push(i);
+                }
+                // const user = responseData.find((i) => i.pname === 'Bharatiya Janata Party');
+                // if (user){
+                //     array.push(user);
+                // }
+            }
+            })();
+            // console.log(ranges);
+            setBjpArray(ranges1);
+            setIncArray(ranges2);
+            setJdsArray(ranges3);
+            setOthArray(ranges4);
+        })
+        .catch(error => {
+            console.error('Axios error:', error);
+        });
+    }
+    
+    // console.log(array);
     const fetchData2 = () => {
         axios.get(`http://localhost:8080/election/woncount`)
             .then((response) => {
@@ -161,6 +215,24 @@ export default function Homechart() {
             });
     }
 
+    const table2Style = {
+        borderCollapse: 'collapse',
+        width: '95%',
+      };
+    
+      const table2HeaderStyle = {
+        border: '1px solid black',
+        padding: '8px',
+        backgroundColor: '#f2f2f2',
+        textAlign: 'center',
+      };
+    
+      const table2CellStyle = {
+        border: '1px solid black',
+        padding: '8px',
+        textAlign: 'center',
+      };
+
     const onPieEnter = useCallback(
         (_, index) => {
             setActiveIndex(index);
@@ -168,8 +240,13 @@ export default function Homechart() {
         [setActiveIndex]
     );
 
+    const displayTable = () => {
+        setCurIndex(activeIndex);
+    }
+    // console.log(array);
     return (
-        <PieChart width={800} height={600}>
+        <>
+        <PieChart width={800} height={450}>
             <Pie
                 activeIndex={activeIndex}
                 activeShape={renderActiveShape}
@@ -181,7 +258,108 @@ export default function Homechart() {
                 fill="#8884d8"
                 dataKey="value"
                 onMouseEnter={onPieEnter}
+                onClick={displayTable}
             />
         </PieChart>
-    );
-}
+
+        {activeIndex === 0?(
+            <center>
+            <table style={table2Style}>
+            <thead>
+                <tr>
+                <th style={table2HeaderStyle}>Sno</th>
+                <th style={table2HeaderStyle}>Candidate Name</th>
+                <th style={table2HeaderStyle}>Constituency Name</th>
+                <th style={table2HeaderStyle}>Total Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {bjparray.map((data,index) => (
+                <tr key={data.sno}>
+                    <td style={table2CellStyle}>{index+1}</td>
+                    <td style={table2CellStyle}>{data.cname}</td>
+                    <td style={table2CellStyle}>{data.constname}</td>
+                    <td style={table2CellStyle}>{data.totvotes}</td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+        </center>):(<div></div>)}
+
+        {activeIndex === 1?(
+            <center>
+            <table style={table2Style}>
+            <thead>
+                <tr>
+                <th style={table2HeaderStyle}>Sno</th>
+                <th style={table2HeaderStyle}>Candidate Name</th>
+                <th style={table2HeaderStyle}>Constituency Name</th>
+                <th style={table2HeaderStyle}>Total Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {inCarray.map((data,index) => (
+                <tr key={data.sno}>
+                    <td style={table2CellStyle}>{index+1}</td>
+                    <td style={table2CellStyle}>{data.cname}</td>
+                    <td style={table2CellStyle}>{data.constname}</td>
+                    <td style={table2CellStyle}>{data.totvotes}</td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+        </center>):(<div></div>)}
+
+        {activeIndex === 2?(
+            <center>
+            <table style={table2Style}>
+            <thead>
+                <tr>
+                <th style={table2HeaderStyle}>Sno</th>
+                <th style={table2HeaderStyle}>Candidate Name</th>
+                <th style={table2HeaderStyle}>Constituency Name</th>
+                <th style={table2HeaderStyle}>Total Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {jdsArray.map((data,index) => (
+                <tr key={data.sno}>
+                    <td style={table2CellStyle}>{index+1}</td>
+                    <td style={table2CellStyle}>{data.cname}</td>
+                    <td style={table2CellStyle}>{data.constname}</td>
+                    <td style={table2CellStyle}>{data.totvotes}</td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+        </center>):(<div></div>)}
+
+        {activeIndex === 3?(
+            <center>
+            <table style={table2Style}>
+            <thead>
+                <tr>
+                <th style={table2HeaderStyle}>Sno</th>
+                <th style={table2HeaderStyle}>Candidate Name</th>
+                <th style={table2HeaderStyle}>Constituency Name</th>
+                <th style={table2HeaderStyle}>Party Name</th>
+                <th style={table2HeaderStyle}>Total Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {othArray.map((data,index) => (
+                <tr key={data.sno}>
+                    <td style={table2CellStyle}>{index+1}</td>
+                    <td style={table2CellStyle}>{data.cname}</td>
+                    <td style={table2CellStyle}>{data.constname}</td>
+                    <td style={table2CellStyle}>{data.pname}</td>
+                    <td style={table2CellStyle}>{data.totvotes}</td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+        </center>):(<div></div>)}
+        </>
+    )
+    // bjp: 0, inc: 1, jds: 2, others: 3
+};

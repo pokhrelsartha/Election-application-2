@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Otp() {
     const [password, setPassword] = useState('');
@@ -8,40 +10,68 @@ export default function Otp() {
     const [valuee, setValuee] = useState('');
     const [otp, setOtp] = useState('');
     const [show,setShow] = useState(false);
-    const [errors, setErrors] = useState('');
     const [showOtp,setShowOtp] = useState(false);
     const [isEmail, setIsEmail] = useState(false);
     const [isNumber, setIsNumber] = useState(false);
     // const [validpass, setValidPass] = useState(false);
-    const history = useHistory();
-    
+    // const history = useHistory();
+    const validateEmail = (email) => {
+      // Regular expression pattern for email validation
+      var regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      return regex.test(email);
+    }
+  
+    const validateNumber = (number) => {
+      return (number.length === 10)
+    }
+
     const handleSubmit1 = (event) => {
         event.preventDefault();
         if (!valuee) {
-            setErrors({ valuee: 'An Email or Phone Number is required' });
+            // toast("An Email or Phone Number is Required");
+            toast.warn('An Email or Phone number is required', {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
             return;
         }
         
         axios.get(`http://localhost:8080/signup/all`).then((respo) => {
           const responseData = respo.data;
           const enteredvalue = valuee;
-          console.log(enteredvalue);
+          // console.log(enteredvalue);
 
           // Find the user object with the entered username
           const emailUser = responseData.find((user) => user.email === enteredvalue);
-          console.log(emailUser);
+          // console.log(emailUser);
 
           const numberUser = responseData.find((user) => user.number === enteredvalue);
-          console.log(numberUser);
+          // console.log(numberUser);
 
           if (emailUser) {
-            console.log('valid Email');
+            // console.log('valid Email');
             const onlyEmail = {
               email: valuee,
             };
             setShowOtp(true);
             setIsEmail(true);
             setIsNumber(false);
+            toast.success('OTP Sent to Email', {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
             axios.put('http://localhost:8080/signup/otp', onlyEmail)
               .then(response => {
                   console.log('Response:', response.data);
@@ -50,13 +80,23 @@ export default function Otp() {
                   console.error('Error is:', error);
               });
             } else if (numberUser) {
-              console.log('valid Number');
+              // console.log('valid Number');
               const onlyNumber = {
                 number: valuee,
               };
               setShowOtp(true);
               setIsEmail(false);
               setIsNumber(true);
+              toast.success('OTP Sent to Phone Number', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
               axios.put('http://localhost:8080/signup/otpsms', onlyNumber)
                 .then(response => {
                     console.log('Response:', response.data);
@@ -64,10 +104,51 @@ export default function Otp() {
                 .catch(error => {
                     console.error('Error is:', error);
                 });
-              } else {
-                console.log('Credential not found!');
+              } 
+              else if (validateEmail(enteredvalue)){
                 setShowOtp(false);
-                alert('Enter correct Email or Phone Number');
+                // alert("Email i.d not found");
+                toast.error('Email i.d not found', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+                return;
+              }
+              else if (validateNumber(enteredvalue)){
+                setShowOtp(false);
+                // alert("Phone number not found");
+                toast.error('Phone number not found', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+                return;
+              }
+              else {
+                // console.log('Credential not found!');
+                setShowOtp(false);
+                // alert('Enter correct Email or Phone Number');
+                toast.error('Enter a valid Email i.d or Phone number', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
                 return;
               }
             // console.log('Email not found!');
@@ -78,127 +159,130 @@ export default function Otp() {
             console.error('Axios error:', error);
           });
 
-        // setShowOtp(true);
-        setErrors({});
         return;
     };
 
-    // const emailpost = (passCredentials) => {
-    //   axios.post('http://localhost:8080/signup/changepassword', passCredentials)
-    //   .then(response => {
-    //       console.log('Response is:', response.data);
-    //       alert('Password Successfully Changed');
-    //       // window.location.href='/';
-    //       history.push('/');
-    //       // setValidPass(true);
-    //       setPassword('');
-    //       setConfirmPassword('');
-    //       setErrors({});
-    //   })
-    //   .catch(error => {
-    //       console.error('Error:', error);
-    //   });
-    // }
-
-    // const numberpost = (passCredentials2) => {
-    //   axios.post('http://localhost:8080/signup/changepassword2', passCredentials2)
-    //   .then(response => {
-    //       console.log('Response is:', response.data);
-    //       alert('Password Successfully Changed');
-    //       // window.location.href='/login';
-    //       history.push('/');
-    //       setPassword('');
-    //       setConfirmPassword('');
-    //       setErrors({});
-    //       // setValidPass(true);
-    //   })
-    //   .catch(error => {
-    //       console.error('Error:', error);
-    //   });
-    // }
-
+    
     const handleSubmit2 = (event) => {
-      console.log("coming to handlesubmit2");
+      event.preventDefault();
+      // console.log("coming to handlesubmit2");
         if (!password) {
-            alert('password is required');
-            console.log('password is required');
+            // alert("enter a password");
+            toast.warn('Enter a password', {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
             return;
             }
-
-        else if (password.length < 7){
-          alert('enter password of length 8 characters minimum');
-          console.log('password length');
-          // setErrors({ password: 'Enter 8 characters minimum' });
+        
+        if (password.length < 7){
+          // alert('enter password of length 8 characters minimum');
+          toast.warn('enter password of length 8 characters minimum', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
           return;
         }
 
-        else if (!confirmPassword){
-          alert('re-enter the password');
-          console.log('password is not re-entered');
+        if (password !== confirmPassword) {
+          // alert('passwords do not match');
+          toast.error('Passwords do not match', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
           return;
         }
 
-        else if (password !== confirmPassword) {
-          alert('passwords do not match');
-          console.log('password matching');
-          // return;
-        }
-
-        else if (isEmail){
-          console.log('inside isemail');
+        if (isEmail){
           const passCredentials = {
             email: valuee,
             password: password,
             };
-            
-            // emailpost(passCredentials);
-            // return;
+        
             axios.post('http://localhost:8080/signup/changepassword', passCredentials)
             .then(response => {
                 console.log('Response is:', response.data);
-                console.log('inside email post');
-                alert('Password Successfully Changed');
-                // window.location.href='/';
-                history.push('/');
+                // alert('Password Successfully Changed');
+                toast.success('Password Successfully Changed', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+                window.location.href='/'
                 // setValidPass(true);
-                setPassword('');
-                setConfirmPassword('');
-                setErrors({});
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+            setPassword('');
+            setConfirmPassword('');
         }
         else if (isNumber){
-          console.log('inside is number');
           const passCredentials2 = {
             number: valuee,
             password: password,
             };
-            
-            // numberpost(passCredentials2);
-            // return;
+        
             axios.post('http://localhost:8080/signup/changepassword2', passCredentials2)
             .then(response => {
                 console.log('Response is:', response.data);
-                console.log('inside number post');
-                alert('Password Successfully Changed');
-                // window.location.href='/login';
-                history.push('/');
-                setPassword('');
-                setConfirmPassword('');
-                setErrors({});
+                // alert('Password Successfully Changed');
+                toast.success('Password Successfully Changed', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+                window.location.href='/'
                 // setValidPass(true);
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+            setPassword('');
+            setConfirmPassword('');
         }
     };
 
     const handleSubmit3 = (event) => {
       if (!otp) {
-          setErrors({ otp: 'OTP is required' });
+          toast.warn('Enter an OTP', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
           return;
           }
       if (isEmail){
@@ -206,24 +290,42 @@ export default function Otp() {
           email: valuee,
           otp: otp,
           };
-          console.log(emailRequest);
+          // console.log(emailRequest);
           axios
           .post('http://localhost:8080/signup/verify', emailRequest)
           .then(response => {
               console.log('Response is:', response.data);
               if (response.data === 'Successfully verified'){
                 setShow(true);
-                console.log('valid otp');
+                // console.log('valid otp');
+                toast.success('OTP Verified Successfully', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
               }
               else if (response.data === 'You have entered the wrong OTP'){
-                setErrors({ otp: 'Enter the correct OTP' });
+                toast.error('You have entered the wrong OTP', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
               }
           })
           .catch(error => {
               console.error('Error:', error);
           });
         setOtp('');
-        setErrors({});
       }
       else if (isNumber){
         const numberRequest = {
@@ -237,17 +339,35 @@ export default function Otp() {
               console.log('Response is:', response.data);
               if (response.data === 'Successfully verified'){
                 setShow(true);
-                console.log('valid otp');
+                toast.success('OTP Verified Successfully', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
+                // console.log('valid otp');
               }
               else if (response.data === 'You have entered the wrong OTP'){
-                setErrors({ otp: 'Enter the correct OTP' });
+                toast.error('You have entered the wrong OTP', {
+                  position: "top-right",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });
               }
           })
           .catch(error => {
               console.error('Error:', error);
           });
         setOtp('');
-        setErrors({});
       }
   };
     
@@ -277,7 +397,6 @@ export default function Otp() {
     <>
     <div style={{ marginTop: '30px' }}>
       <center>
-        {/* <h2>Enter otp</h2> */}
           {show ? (
             <>
             <h2>Change Password</h2>
@@ -290,11 +409,6 @@ export default function Otp() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {errors.password && (
-              <span className="error" style={{ position: 'fixed', marginTop: '9px', paddingLeft: '10px' }}>
-                {errors.password}
-              </span>
-            )}
           </div>
           <div>
             <label style={{ position: 'relative', paddingRight: '20px' }}>Confirm New Password:</label>
@@ -305,24 +419,11 @@ export default function Otp() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               style={{ position: 'relative', marginLeft: '0px', paddingRight: '0px' }}
             />
-            {errors.confirmPassword && (
-              <span className="error" style={{ position: 'fixed', marginTop: '9px', paddingLeft: '10px' }}>
-                {errors.confirmPassword}
-              </span>
-            )}
           </div>
           <center>
-            {/* {validpass ? (
-              <Link to="/login">
-              <button onClick={handleSubmit2} type="submit" className="btn btn-success">
-                  Submit
-              </button>
-              </Link>
-            ):( */}
             <button onClick={handleSubmit2} type="submit" className="btn btn-success">
                 Submit
             </button>
-            {/* )} */}
           </center>
           </form>
           </>
@@ -341,11 +442,6 @@ export default function Otp() {
               onChange={(e) => setOtp(e.target.value)}
               style={{ position: 'relative', marginLeft: '0px', paddingRight: '0px' }}
             />
-            {errors.otp && (
-              <span className="error" style={{ position: 'fixed', marginTop: '9px', paddingLeft: '10px' }}>
-                {errors.otp}
-              </span>
-            )}
           </div>
           <center>
           <button onClick={handleSubmit3} type="submit" className="btn btn-success">
@@ -367,11 +463,6 @@ export default function Otp() {
               onChange={(e) => setValuee(e.target.value)}
               style={{ position: 'relative', marginLeft: '0px', paddingRight: '0px' }}
             />
-            {errors.valuee && (
-              <span className="error" style={{ position: 'fixed', marginTop: '9px', paddingLeft: '10px' }}>
-                {errors.valuee}
-              </span>
-            )}
           </div>
           <center>
           <button onClick={handleSubmit1} type="submit" className="btn btn-success">
@@ -384,6 +475,7 @@ export default function Otp() {
         </>)}
       </center>
     </div>
+    <ToastContainer/>
     </>
   )
 }

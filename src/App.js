@@ -14,18 +14,21 @@ import Table4 from "./components/Tables/Table4";
 import Table5 from "./components/Tables/Table5";
 import Cabinet from "./components/Cabinet/Cabinet";
 import SessionTimeout from "./components/Authorization/SessionTimeout";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Admin from "./components/Authorization/Admin";
 
 
 function App() {
     const [render, setRender] = useState(false);
-    const [sessionExpired, setSessionExpired] = useState(false);
+    const [adminRender, setAdminRender] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const history = useHistory();
 
     const handleSessionTimeout = () => {
-      setSessionExpired(true);
       setRender(false);
       setIsAuthenticated(false);
+      setAdminRender(false);
       window.location.href = '/';
       // history.push('/');
     };
@@ -34,7 +37,6 @@ function App() {
       // Check if the user is already logged in
       const userLoggedIn = isAuthenticated;
       if (!userLoggedIn) {
-        setSessionExpired(true);
         setIsAuthenticated(false);
       }
     }, [isAuthenticated]);
@@ -43,63 +45,106 @@ function App() {
         <Router>
           {/* this below snippet works fine, but not spa */}
            <SessionTimeout timeoutInMinutes={10} onTimeout={handleSessionTimeout} history={history}/>
+           <ToastContainer/>
           {/* <SessionTimeout timeoutInMinutes={0.07} onTimeout={handleSessionTimeout}/> */}
           {/* {isAuthenticated?(<Header render={render}/>):(<Header render={false}/>)} */}
-          {isAuthenticated?(
-            <div>
-            <Header render={render}/>
-            <Switch>
-              <Route path="/home">
-                <Home/>
-              </Route>
-              <Route path="/charts">
-                <Charts />
-              </Route>
-              <Route path="/reports">
-                <Reports />
-              </Route>
-              <Route path="/cabi">
-                <Cabinet />
-              </Route>
-              <Route path="/table1">
-                <Table1 />
-              </Route>
-              <Route path="/table2">
-                <Table2 />
-              </Route>
-              <Route exact path="/table3">
-                <Table3 />
-              </Route>
-              <Route exact path="/table4">
-                <Table4 />
-              </Route>
-              <Route exact path="/table5">
-                <Table5 />
-              </Route>
-              <Route path="/">
-                <Home/>
-              </Route>
-              <Route path="/logout">
-                <Login/>
-              </Route>
-            </Switch>
-            </div>
-          ):(
-            <div>
-              <Header render={false}/>
+          {adminRender? (
+              <div>
+              <Header render={render} adminRender={adminRender}/>
               <Switch>
-                <Route path="/signup">
-                  <Signup setRender={setRender}/>
+                <Route path="/home">
+                  <Home/>
                 </Route>
-                <Route path="/emailotp">
-                  <Otp/>
+                <Route path="/charts">
+                  <Charts />
+                </Route>
+                <Route path="/reports">
+                  <Reports />
+                </Route>
+                <Route path="/cabi">
+                  <Cabinet />
+                </Route>
+                <Route path="/admin">
+                  <Admin />
+                </Route>
+                <Route path="/table1">
+                  <Table1 />
+                </Route>
+                <Route path="/table2">
+                  <Table2 />
+                </Route>
+                <Route exact path="/table3">
+                  <Table3 />
+                </Route>
+                <Route exact path="/table4">
+                  <Table4 />
+                </Route>
+                <Route exact path="/table5">
+                  <Table5 />
                 </Route>
                 <Route path="/">
-                  <Login auth={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setRender={setRender} />
+                  <Home/>
+                </Route>
+                <Route path="/logout">
+                  <Login/>
                 </Route>
               </Switch>
-             </div>
-          )}
+              </div>
+          ):isAuthenticated ? (
+              <div>
+                <Header render={render} adminRender={adminRender}/>
+                <Switch>
+                  <Route path="/home">
+                    <Home/>
+                  </Route>
+                  <Route path="/charts">
+                    <Charts />
+                  </Route>
+                  <Route path="/reports">
+                    <Reports />
+                  </Route>
+                  <Route path="/cabi">
+                    <Cabinet />
+                  </Route>
+                  <Route path="/table1">
+                    <Table1 />
+                  </Route>
+                  <Route path="/table2">
+                    <Table2 />
+                  </Route>
+                  <Route exact path="/table3">
+                    <Table3 />
+                  </Route>
+                  <Route exact path="/table4">
+                    <Table4 />
+                  </Route>
+                  <Route exact path="/table5">
+                    <Table5 />
+                  </Route>
+                  <Route path="/">
+                    <Home/>
+                  </Route>
+                  <Route path="/logout">
+                    <Login/>
+                  </Route>
+                </Switch>
+              </div>
+            ):(
+              <div>
+                <Header render={false} adminRender={false}/>
+                <Switch>
+                  <Route path="/signup">
+                    <Signup setRender={setRender} setAdminRender={setAdminRender}/>
+                  </Route>
+                  <Route path="/emailotp">
+                    <Otp/>
+                  </Route>
+                  <Route path="/">
+                    <Login setAdminRender={setAdminRender} auth={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setRender={setRender} />
+                  </Route>
+                </Switch>
+               </div>
+            )}
         </Router>
       );
     }

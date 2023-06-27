@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import '../CSS/Login.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = (props) => {
   const [username, setUsername] = useState('');
@@ -36,28 +38,77 @@ const Login = (props) => {
                 const user = responseData.find((user) => user.username === enteredUsername);
                 if (enteredUsername === 'admin'){
                     console.log('Password matched!');
+                    setTimeout(() => {
+                      toast.success('Admin Login successful',{
+                          position: "top-left",
+                          autoClose: 2000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          });
+                    }, 300);
                     props.setIsAuthenticated(true);
                     props.setRender(true);
+                    props.setAdminRender(true);
                 }
                 else{
                 if (user) {
                   if (response.data === true) {
                     console.log('Password matched!');
+                    setTimeout(() => {
+                      toast.success('Login successful',{
+                          position: "top-left",
+                          autoClose: 2000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: false,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          });
+                    }, 300);
                     props.setIsAuthenticated(true);
                     props.setRender(true);
+                    props.setAdminRender(false);
+                    // alert("Login Successful");
 
                   } else {
                     console.log('Password does not match!');
-                    alert('Incorrect Password');
+                    // alert('Incorrect Password');
                     props.setRender(false);
                     props.setIsAuthenticated(false);
+                    props.setAdminRender(false);
+                    toast.error('Incorrect Password', {
+                      position: "top-right",
+                      autoClose: 2000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: false,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                      });
                     return;
                   }
                 } else {
                   console.log('User not found!');
-                  alert('User not found');
+                  // alert('User not found');
+                  toast.error('User not found', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    });
                   props.setRender(false);
                   props.setIsAuthenticated(false);
+                  props.setAdminRender(false);
                   return;
                 }
                 // Reset form fields
@@ -75,6 +126,7 @@ const Login = (props) => {
   };
 
   return (
+    <>
     <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center' }}>
   <div>
     <center>
@@ -110,7 +162,8 @@ const Login = (props) => {
     </div>
   </div>
 </div>
-
+<ToastContainer/>
+</>
   );
 };
 
