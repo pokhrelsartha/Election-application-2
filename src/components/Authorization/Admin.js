@@ -49,17 +49,6 @@ const Admin = () => {
       });
   };
 
-  // const updateUser = (id, newName) => {
-  //   setUsers(
-  //     users.map((user) => {
-  //       if (user.id === id) {
-  //         return { ...user, name: newName };
-  //       }
-  //       return user;
-  //     })
-  //   );
-  // };
-
   return (
     <div>
     <h2 style={{paddingTop:'20px'}}>User List</h2>

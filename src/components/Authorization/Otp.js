@@ -370,29 +370,7 @@ export default function Otp() {
         setOtp('');
       }
   };
-    
-        // const signupData = {
-        // password: password,
-        // email: email,
-        // };
-    
-        // axios
-        // .post('http://localhost:8080/signup/save', signupData)
-        // .then(response => {
-        //     console.log('Response:', response.data);
-        //     alert('User Added');
-        //     history.push('/login'); // Navigate to Login page
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        // });
-    
-        // Reset form fields and errors
-        // setPassword('');
-        // setEmail('');
-        // setConfirmPassword('');
-    
-        // setErrors({});
+
   return (
     <>
     <div style={{ marginTop: '30px' }}>

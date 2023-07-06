@@ -34,7 +34,7 @@ const Login = (props) => {
                 const enteredUsername = username; // Replace with the username entered by the user
                 // const enteredPassword = password; // Replace with the password entered by the user
 
-                // Find the user object with the entered username
+                // Find the user 'object' with the entered username
                 const user = responseData.find((user) => user.username === enteredUsername);
                 if (enteredUsername === 'admin'){
                     console.log('Password matched!');
@@ -95,7 +95,6 @@ const Login = (props) => {
                   }
                 } else {
                   console.log('User not found!');
-                  // alert('User not found');
                   toast.error('User not found', {
                     position: "top-right",
                     autoClose: 2000,

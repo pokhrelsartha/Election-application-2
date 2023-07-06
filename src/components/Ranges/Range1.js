@@ -13,13 +13,12 @@ export default function Range1() {
   }, []);
 
   const fetchRange1 = (start, end) => {
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true);
 
     axios.get(`http://localhost:8080/election/constrange/${start}/${end}`)
       .then((response) => {
         const responseData = response.data;
         setData(responseData);
-        // console.log(responseData.length);
         const a = responseData.length;
         setCount(a);
       })
@@ -51,7 +50,7 @@ export default function Range1() {
     <div>
       <br/>
       <center>
-        <h1>Constituency won with margin Range 1-100 </h1>
+        <h1>Constituency won with margin Range 1-100</h1>
         <h2 style={{ marginTop: '0.2rem' }}>({count} {count > 1 ? 'candidates' : 'candidate'})</h2>
         {isLoading ? ( // Render loading button if isLoading is true
           // <button disabled>Loading...</button>

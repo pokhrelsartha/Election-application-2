@@ -2,6 +2,7 @@ import React, { Fragment, useState ,useEffect} from 'react';
 import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import "../CSS/Table5.css";
+import Search from './Search';
 
 const colors = [
   '#1f77b4', // Steel Blue
@@ -55,13 +56,16 @@ const DrillDownPieChart1 = (props) => {
   
   useEffect(() => {
     // console.log('in useEffect');
+    // setMyArray([]);
     (async () => {
+      // setMyArray([]);
       for (let i = 1; i <= 201; i += 25) {
         const rangeStart = i;
         const rangeEnd = i + 24;
         let rangeKey = `Range ${rangeStart}-${rangeEnd}`;
   
         try {
+          // setMyArray([]);
           const rangeValue = await MapArr(rangeStart, rangeEnd);
           if (i === 201){
             rangeKey = 'Range 201-224';
@@ -73,7 +77,7 @@ const DrillDownPieChart1 = (props) => {
         }
       }
   
-      // console.log(myArray);
+      console.log(myArray);
       setMapddata(myArray);
     })();
   }, []);
@@ -324,6 +328,9 @@ const DrillDownPieChart1 = (props) => {
 
   return (
     <>
+    <div style={{marginLeft: '920px', marginRight: '25px'}}>
+      <Search/>
+    </div>
     {/* we don't need to have a back button in 1st level, but needed in other levels */}
     {previousData.length > 0 && (
         <button className="btn btn-secondary mx-2" onClick={handleBackClick} >
@@ -412,6 +419,7 @@ const DrillDownPieChart1 = (props) => {
               </tr>
             </thead>
             <tbody>
+              {console.log(uniqueArray)}
                 {uniqueArray.map((data, index) => {
                   if (index % 2 !== 1) {
                     return (

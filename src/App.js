@@ -17,6 +17,7 @@ import SessionTimeout from "./components/Authorization/SessionTimeout";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Admin from "./components/Authorization/Admin";
+import Search from "./components/Charts/Search";
 
 
 function App() {
@@ -52,81 +53,35 @@ function App() {
               <div>
               <Header render={render} adminRender={adminRender}/>
               <Switch>
-                <Route path="/home">
-                  <Home/>
-                </Route>
-                <Route path="/charts">
-                  <Charts />
-                </Route>
-                <Route path="/reports">
-                  <Reports />
-                </Route>
-                <Route path="/cabi">
-                  <Cabinet />
-                </Route>
-                <Route path="/admin">
-                  <Admin />
-                </Route>
-                <Route path="/table1">
-                  <Table1 />
-                </Route>
-                <Route path="/table2">
-                  <Table2 />
-                </Route>
-                <Route exact path="/table3">
-                  <Table3 />
-                </Route>
-                <Route exact path="/table4">
-                  <Table4 />
-                </Route>
-                <Route exact path="/table5">
-                  <Table5 />
-                </Route>
-                <Route path="/">
-                  <Home/>
-                </Route>
-                <Route path="/logout">
-                  <Login/>
-                </Route>
+                <Route path="/home"><Home/></Route>
+                <Route path="/charts"><Charts /></Route>
+                <Route path="/reports"><Reports /></Route>
+                <Route path="/cabi"><Cabinet /></Route>
+                <Route path="/admin"><Admin /></Route>
+                <Route path="/table1"><Table1 /></Route>
+                <Route path="/table2"><Table2 /></Route>
+                <Route exact path="/table3"><Table3 /></Route>
+                <Route exact path="/table4"><Table4 /></Route>
+                <Route exact path="/table5"><Table5 /></Route>
+                <Route path="/"><Home/></Route>
+                <Route path="/logout"><Login/></Route>
               </Switch>
               </div>
           ):isAuthenticated ? (
               <div>
                 <Header render={render} adminRender={adminRender}/>
                 <Switch>
-                  <Route path="/home">
-                    <Home/>
-                  </Route>
-                  <Route path="/charts">
-                    <Charts />
-                  </Route>
-                  <Route path="/reports">
-                    <Reports />
-                  </Route>
-                  <Route path="/cabi">
-                    <Cabinet />
-                  </Route>
-                  <Route path="/table1">
-                    <Table1 />
-                  </Route>
-                  <Route path="/table2">
-                    <Table2 />
-                  </Route>
-                  <Route exact path="/table3">
-                    <Table3 />
-                  </Route>
-                  <Route exact path="/table4">
-                    <Table4 />
-                  </Route>
-                  <Route exact path="/table5">
-                    <Table5 />
-                  </Route>
-                  <Route path="/">
-                    <Home/>
-                  </Route>
-                  <Route path="/logout">
-                    <Login/>
-                  </Route>
+                  <Route path="/home"><Home/></Route>
+                  <Route path="/charts"><Charts /></Route>
+                  <Route path="/reports"><Reports /></Route>
+                  <Route path="/cabi"><Cabinet /></Route>
+                  <Route path="/table1"><Table1 /></Route>
+                  <Route path="/table2"><Table2 /></Route>
+                  <Route exact path="/table3"><Table3 /></Route>
+                  <Route exact path="/table4"><Table4 /></Route>
+                  <Route exact path="/table5"><Table5 /></Route>
+                  <Route path="/"><Home/></Route>
+                  <Route path="/logout"><Login/></Route>
                 </Switch>
               </div>
             ):(
@@ -136,9 +91,7 @@ function App() {
                   <Route path="/signup">
                     <Signup setRender={setRender} setAdminRender={setAdminRender}/>
                   </Route>
-                  <Route path="/emailotp">
-                    <Otp/>
-                  </Route>
+                  <Route path="/emailotp"><Otp/></Route>
                   <Route path="/">
                     <Login setAdminRender={setAdminRender} auth={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setRender={setRender} />
                   </Route>

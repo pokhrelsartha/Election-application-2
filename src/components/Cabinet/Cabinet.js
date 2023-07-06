@@ -60,11 +60,6 @@ export default function Cabinet() {
                 {arr.map((data,index) => (
                     <tr key={data.sno}>
                     <td style={table2CellStyle}>{index+1}</td>
-
-                    {/* {data.ministername == 'Sri SIDDARAMAIAHChief Minister' ?
-                    (<td style={table2CellStyle}>Sri SIDDARAMAIAH (Chief Minister)</td>):
-                    (<td style={table2CellStyle}>{data.ministername}</td>)} */}
-                    
                     <td style={table2CellStyle}>{data.ministername}</td>
                     <td style={table2CellStyle}>{data.portfolio}</td>
                     </tr>

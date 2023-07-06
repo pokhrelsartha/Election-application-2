@@ -31,8 +31,7 @@ const Signup = () => {
       number: '+91'+number,
     };
   
-    axios
-      .post('http://localhost:8080/signup/save', signupData)
+    axios.post('http://localhost:8080/signup/save', signupData)
       .then(response => {
         // alert('User Added');
         setTimeout(() => {
@@ -76,18 +75,6 @@ const Signup = () => {
           const is_user = responseData.find((user) => user.username === enteredUsername);
           const is_existing_email = responseData.find((user) => user.email === enteredEmail);
           const is_existing_number = responseData.find((user) => user.number === '+91'+enteredNumber);
-
-          // if (is_user){
-          //   console.log('Username already exists');
-          // }
-
-          // if (is_existing_email){
-          //   console.log('Email already exists');
-          // }
-
-          // if (is_existing_number){
-          //   console.log('Number already exists');
-          // }
 
       if (!username) {
         toast.info('Username is required', {
