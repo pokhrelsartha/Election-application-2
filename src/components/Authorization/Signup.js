@@ -31,7 +31,7 @@ const Signup = () => {
       number: '+91'+number,
     };
   
-    axios.post('http://localhost:8080/signup/save', signupData)
+    axios.post('http://52.42.106.142:8001/electionfinal/signup/save', signupData)
       .then(response => {
         // alert('User Added');
         setTimeout(() => {
@@ -66,7 +66,7 @@ const Signup = () => {
 
       event.preventDefault();
 
-      axios.get(`http://localhost:8080/signup/all`).then((respo) => {
+      axios.get(`http://52.42.106.142:8001/electionfinal/signup/all`).then((respo) => {
           const responseData = respo.data;
           const enteredUsername = username; // Replace with the username entered by the user
           const enteredEmail = email;

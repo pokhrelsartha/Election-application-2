@@ -42,7 +42,7 @@ const DrillDownPieChart1 = (props) => {
   
   const MapArr = (start, end) => {
     const rangesMap = [];
-    return axios.get(`http://localhost:8080/election/slice/${start}/${end}`).then((respo) => {
+    return axios.get(`http://52.42.106.142:8001/electionfinal/election/slice/${start}/${end}`).then((respo) => {
       const response = respo.data;
       for (var i of response) {
         const val = i.constname;
@@ -90,8 +90,8 @@ const DrillDownPieChart1 = (props) => {
   // console.log(uniqueArray);
 
   const fetchData = (start,end) => {
-    axios.get(`http://localhost:8080/election/slice/${start}/${end}`).then((respo) => {
-      // http://localhost:8080/cabinet/ministers
+    axios.get(`http://52.42.106.142:8001/electionfinal/election/slice/${start}/${end}`).then((respo) => {
+      // http://52.42.106.142:8001/electionfinal/cabinet/ministers
       const response = respo.data;
       const ranges2 = [];
       for (var i of response){
@@ -114,7 +114,7 @@ const DrillDownPieChart1 = (props) => {
   // 3rd level data fetching
   const fetchData2 = (val) =>  {
     if (level === 2){
-      axios.get(`http://localhost:8080/election/slicesecond/${val}`)
+      axios.get(`http://52.42.106.142:8001/electionfinal/election/slicesecond/${val}`)
       .then((response) => {
         // console.log('Axios response:', response.data);
         const ranges3 = [];

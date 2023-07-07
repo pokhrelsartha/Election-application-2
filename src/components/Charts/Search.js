@@ -12,7 +12,7 @@ function Search() {
 
   useEffect(() => {
     const search = () => {
-      axios.get('http://localhost:8080/election/wondata')
+      axios.get('http://52.42.106.142:8001/electionfinal/election/wondata')
         .then((response) => {
           const filteredResults = response.data.filter((election) =>
             election.constname.toLowerCase().includes(searchQuery.toLowerCase())// or startsWith() ??

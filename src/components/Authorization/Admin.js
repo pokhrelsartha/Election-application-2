@@ -9,7 +9,7 @@ const Admin = () => {
   },[]);
 
   const getData = () => {
-    axios.get(`http://localhost:8080/signup/all`).then((respo) => {
+    axios.get(`http://52.42.106.142:8001/electionfinal/signup/all`).then((respo) => {
       const responseData = respo.data;
       setUsers(responseData);
       console.log(responseData);
@@ -38,7 +38,7 @@ const Admin = () => {
   };
 
   const deleteUser = (id) => {
-    axios.delete(`http://localhost:8080/signup/delete/${id}`).then((respo) => {
+    axios.delete(`http://52.42.106.142:8001/electionfinal/signup/delete/${id}`).then((respo) => {
         const responseData = respo.data;
         // setUsers(responseData);
         console.log(responseData);

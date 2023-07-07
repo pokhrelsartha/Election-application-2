@@ -110,7 +110,7 @@ export default function Homechart() {
     // const [count, setCount] = useState(0);
     
     const eleData = () => {
-        axios.get(`http://localhost:8080/election/wondata`)
+        axios.get(`http://52.42.106.142:8001/electionfinal/election/wondata`)
         .then((response) => {
             const responseData = response.data;
             // console.log(responseData);
@@ -153,7 +153,7 @@ export default function Homechart() {
     
     // console.log(array);
     const fetchData2 = () => {
-        axios.get(`http://localhost:8080/election/woncount`)
+        axios.get(`http://52.42.106.142:8001/electionfinal/election/woncount`)
             .then((response) => {
                 // console.log('Axios response:', response.data);
                 const ranges3 = [];
