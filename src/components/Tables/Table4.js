@@ -19,7 +19,7 @@ export default function Table4() {
 
   const fetchTable4 = () => {
     setIsLoading(true);
-    axios.get('http://localhost:8080/election/highestnota').then((respon) => {
+    axios.get('http://52.42.106.142:8001/electionfinal/election/highestnota').then((respon) => {
       const response = respon.data;
       setData(response);
     } )

@@ -16,7 +16,7 @@ export default function Table3() {
 
   const fetchTable3 = () => {
     setIsLoading(true);
-    axios.get('http://localhost:8080/election/more').then((respon) => {
+    axios.get('http://52.42.106.142:8001/electionfinal/election/more').then((respon) => {
       const response = respon.data;
       setData(response);
     } )

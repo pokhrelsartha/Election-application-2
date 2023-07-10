@@ -15,7 +15,7 @@ export default function Table2() {
 
   const fetchTable2 = () => {
     setIsLoading(true);
-    axios.get('http://localhost:8080/election/highestvotes').then((respon) => {
+    axios.get('http://52.42.106.142:8001/electionfinal/election/highestvotes').then((respon) => {
       const response = respon.data;
       setData(response);
     } )
